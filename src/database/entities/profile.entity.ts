@@ -25,7 +25,7 @@ export class UserProfile {
   work: string;
 
   @Column({ nullable: true })
-  nickName: string;
+  nickname: string;
 
   @Column({ nullable: true })
   bio: string;

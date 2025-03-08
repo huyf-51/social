@@ -1,10 +1,12 @@
-import { IsPhoneNumber, IsStrongPassword, Validate } from 'class-validator';
+import { IsNotEmpty, IsPhoneNumber, IsStrongPassword, Validate } from 'class-validator';
 import { CustomIsStrongPassword } from 'src/common/validation/password.validation';
 
 export class LoginDto {
+  @IsNotEmpty({message: 'phonenumber required'})
   @IsPhoneNumber('VN', { message: 'invalid phone number' })
   phoneNumber: string;
 
+  @IsNotEmpty({message: 'password required'})
   @IsStrongPassword(
     {
       minLength: 8,

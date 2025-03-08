@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Account } from 'src/database/entities/auth.entity';
 import { Connection } from 'src/database/entities/connection.entity';
 import { User } from 'src/database/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -10,8 +9,6 @@ import { Type } from 'src/common/enum/notification-type.enum';
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('ACCOUNT_REPOSITORY')
-    private accountRepository: Repository<Account>,
     @Inject('USER_REPOSITORY') private userRepository: Repository<User>,
     @Inject('DATA_SOURCE') private dataSource: DataSource,
     @Inject('CONNECTION_REPOSITORY')
@@ -20,29 +17,17 @@ export class UserService {
     private notificationService: NotificationService
   ) {}
 
-  async sendFriendRequest(requesterAccountID: number, receiverUserID: number) {
-    const requestUser = await this.dataSource
-      .createQueryBuilder()
-      .select('user.id')
-      .from(User, 'user')
-      .where('user.accountID = :id', { id: requesterAccountID })
-      .getOne();
+  async sendFriendRequest(requesterUserID: number, receiverUserID: number) {
     await this.connectionRepository.save({
-      requesterID: requestUser['id'],
+      requesterID: requesterUserID,
       receiverID: receiverUserID,
     });
-    this.eventGateway.sendNotification(receiverUserID, {type: 'ADD_FRIEND', requesterID: requestUser['id']})
-    await this.notificationService.storeNotification(Type.ADD_FRIEND, requestUser['id'], receiverUserID)
+    this.eventGateway.sendNotification(receiverUserID, {type: 'ADD_FRIEND', requesterID: requesterUserID})
+    await this.notificationService.storeNotification(Type.ADD_FRIEND, requesterUserID, receiverUserID)
   }
 
-  async acceptFriendRequest(acceptAccountID: number, requesterUserID: number) {
-    const acceptUser = await this.dataSource
-      .createQueryBuilder()
-      .select('user.id')
-      .from(User, 'user')
-      .where('user.accountID = :id', { id: acceptAccountID })
-      .getOne();
-    await this.connectionRepository.update({receiverID: acceptUser['id'], requesterID: requesterUserID}, {isConnected: true})
+  async acceptFriendRequest(acceptUserID: number, requesterUserID: number) {
+    await this.connectionRepository.update({receiverID: acceptUserID, requesterID: requesterUserID}, {isConnected: true})
   }
 
   async searchUser(name: string) {

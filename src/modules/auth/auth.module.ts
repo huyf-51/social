@@ -5,7 +5,6 @@ import { JwtModule } from '@nestjs/jwt';
 import fs from 'fs-extra';
 import path from 'path';
 import { DataSource } from 'typeorm';
-import { Account } from '../../database/entities/auth.entity';
 import { DatabaseModule } from '../database/database.module';
 import { User } from 'src/database/entities/user.entity';
 import { UserProfile } from 'src/database/entities/profile.entity';
@@ -14,13 +13,6 @@ import { UserProfile } from 'src/database/entities/profile.entity';
   controllers: [AuthController],
   providers: [
     AuthService,
-    {
-      provide: 'ACCOUNT_REPOSITORY',
-      useFactory(dataSource: DataSource) {
-        return dataSource.getRepository(Account);
-      },
-      inject: ['DATA_SOURCE'],
-    },
     {
       provide: 'USER_REPOSITORY',
       useFactory(dataSource: DataSource) {

@@ -5,7 +5,6 @@ import {
   Inject,
 } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
-import { Account } from '../../database/entities/auth.entity';
 import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Repository, EntityManager } from 'typeorm';
@@ -18,8 +17,6 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    @Inject('ACCOUNT_REPOSITORY')
-    private accountRepository: Repository<Account>,
     @Inject('USER_REPOSITORY') private userRepository: Repository<User>,
     @Inject('USER_PROFILE_REPOSITORY')
     private userProfileRepository: Repository<UserProfile>,
@@ -27,7 +24,7 @@ export class AuthService {
 
   async login(account: LoginDto) {
     const { phoneNumber, password } = account;
-    const existAccount = await this.accountRepository.findOne({
+    const existAccount = await this.userRepository.findOne({
       where: { phoneNumber: phoneNumber },
     });
 
@@ -43,8 +40,8 @@ export class AuthService {
   }
 
   async signUp(account: CreateAccountDto) {
-    const { phoneNumber, password, firstName, lastName } = account;
-    const existAccount = await this.accountRepository.findOne({
+    const { phoneNumber, password } = account;
+    const existAccount = await this.userRepository.findOne({
       where: { phoneNumber: phoneNumber },
     });
     if (existAccount) {
@@ -55,18 +52,10 @@ export class AuthService {
 
     await AppDataSource.transaction(
       async (transactionalEntityManager: EntityManager) => {
-        const newAccount: Partial<Account> =
-          await transactionalEntityManager.save(
-            this.accountRepository.create({
-              ...account,
-              password: hashPassword,
-            }),
-          );
-        const newUser: Partial<User> = await transactionalEntityManager.save(
+        const newUser = await transactionalEntityManager.save(
           this.userRepository.create({
-            accountID: newAccount.id,
-            firstName,
-            lastName
+            ...account, 
+            password: hashPassword,
           }),
         );
         await transactionalEntityManager.save(

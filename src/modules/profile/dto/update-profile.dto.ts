@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsString, IsNotEmpty } from 'class-validator';
 
 export class UpdateProfileDto {
   @IsString()

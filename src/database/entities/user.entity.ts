@@ -2,26 +2,36 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
-import { Account } from '../../database/entities/auth.entity';
+import { Role } from 'src/common/enum/role.enum';
 
 @Entity('Users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column()
   lastName: string;
 
   @Column({ nullable: true })
   email: string;
 
-  @OneToOne(() => Account)
-  @JoinColumn({ name: 'accountID' })
-  accountID: number;
+  @Column()
+  phoneNumber: string;
+
+  @Column()
+  password: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  roleId: Role;
+
+  @Column({ nullable: true })
+  status: boolean;
 }

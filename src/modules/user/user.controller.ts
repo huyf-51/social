@@ -23,14 +23,14 @@ export class UserController {
     @Req() req,
     @Body(new ValidationPipe()) user: SendAndAcceptFriendDto,
   ) {
-    await this.userService.sendFriendRequest(req.accountID.id, user.userID);
+    await this.userService.sendFriendRequest(req.userId, user.userID);
     return 'send friend request success';
   }
 
   @Put('/friend/accept')
   @UseGuards(AuthGuard)
   async acceptFriendRequest(@Req() req, @Body(new ValidationPipe()) user: SendAndAcceptFriendDto) {
-    await this.userService.acceptFriendRequest(req.accountID.id, user.userID);
+    await this.userService.acceptFriendRequest(req.userId, user.userID);
     return 'accept friend request success';
   }
 

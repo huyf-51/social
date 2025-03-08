@@ -4,7 +4,6 @@ import { UserController } from './user.controller';
 import { DataSource } from 'typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { DatabaseModule } from '../database/database.module';
-import { Account } from 'src/database/entities/auth.entity';
 import databaseProvider from '../database/database.provider';
 import { Connection } from 'src/database/entities/connection.entity';
 import { EventGateway } from '../event/event.gateway';
@@ -15,13 +14,6 @@ import { Notification } from 'src/database/entities/notification.entity';
 @Module({
   providers: [
     UserService,
-    {
-      provide: 'ACCOUNT_REPOSITORY',
-      useFactory(dataSource: DataSource) {
-        return dataSource.getRepository(Account);
-      },
-      inject: ['DATA_SOURCE'],
-    },
     {
       provide: 'USER_REPOSITORY',
       useFactory: (dataSource: DataSource) => {

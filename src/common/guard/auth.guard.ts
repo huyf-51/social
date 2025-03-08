@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const accessToken = request.headers.authorization;
     const result = await this.jwtService.verifyAsync(accessToken);
-    request.accountID = result;
+    request.userId = result.id;
     return true;
   }
 }
