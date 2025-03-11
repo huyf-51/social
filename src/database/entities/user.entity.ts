@@ -2,6 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Role } from 'src/common/enum/role.enum';
 
@@ -34,4 +35,7 @@ export class User {
 
   @Column({ nullable: true })
   status: boolean;
+
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date
 }

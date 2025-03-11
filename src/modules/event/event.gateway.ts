@@ -36,8 +36,9 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(String(userID)).emit("notification", JSON.stringify(content))
   }
 
-  @SubscribeMessage('huy')
+  @SubscribeMessage('sendMessage')
   handleMessage(socket: Socket, data: string): string {
+    // socket.to()
     return data;
   }
 }

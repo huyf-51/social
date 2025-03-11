@@ -4,6 +4,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -22,4 +23,7 @@ export class Connection {
 
   @Column({ default: false })
   isConnected: boolean;
+
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date
 }

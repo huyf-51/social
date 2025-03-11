@@ -5,6 +5,8 @@ import { Message } from '../entities/message.entity';
 import { New } from '../entities/new.entity';
 import { Notification } from '../entities/notification.entity';
 import { Connection } from '../entities/connection.entity';
+import { Conversation } from '../entities/conversation.entity';
+import { ConversationMember } from '../entities/conversationMember.entity';
 
 const AppDataSource = new DataSource({
   type: 'postgres',
@@ -20,6 +22,8 @@ const AppDataSource = new DataSource({
     New,
     Notification,
     Connection,
+    Conversation,
+    ConversationMember
   ],
   logging: true,
 });

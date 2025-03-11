@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   OneToOne,
+  CreateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -39,4 +40,7 @@ export class UserProfile {
 
   @Column({ nullable: true })
   backgroundImage: string;
+
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date
 }

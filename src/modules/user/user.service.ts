@@ -34,10 +34,10 @@ export class UserService {
     return await this.dataSource
       .getRepository(User)
       .createQueryBuilder('user')
-      .where('user.firstName ~ :name', {name})
-      .orWhere('user.lastName ~ :name', {name})
-      .orWhere(`'${name}' ~ user.firstName`)
-      .orWhere(`'${name}' ~ user.lastName`)
+      .where('user.firstName ~* :name', {name})
+      .orWhere('user.lastName ~* :name', {name})
+      .orWhere(`'${name}' ~* user.firstName`)
+      .orWhere(`'${name}' ~* user.lastName`)
       .getMany()
   }
 } 
